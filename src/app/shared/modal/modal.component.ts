@@ -5,12 +5,13 @@ import { ModalService } from 'src/app/services/modal.service';
   selector: 'app-modal',
   templateUrl: './modal.component.html',
   styleUrls: ['./modal.component.scss'],
-	providers: [
-		ModalService
-	]
 })
 export class ModalComponent {
 	constructor(public modal: ModalService) {
+	}
 
+	onToggleModal($event: Event) {
+		$event.preventDefault();
+		this.modal.toggleModal();
 	}
 }
