@@ -10,11 +10,9 @@ import { ModalService } from 'src/app/services/modal.service';
 })
 export class AuthModalComponent implements OnInit, OnDestroy{
 	constructor(public modal: ModalService) {
-		
 	}
 
 	ngOnInit(): void {
-		
 		this.modal.register('auth');
 	}
 
