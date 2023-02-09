@@ -7,7 +7,6 @@ import { ModalService } from '../services/modal.service';
   styleUrls: ['./nav.component.scss']
 })
 export class NavComponent {
-
 	constructor(public modal: ModalService) {
 
 	}
