@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { FormGroup, FormControl, Validators} from '@angular/forms';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
+import { AngularFirestore } from '@angular/fire/compat/firestore';
 
 @Component({
   selector: 'app-register',
@@ -9,7 +10,7 @@ import { AngularFireAuth } from '@angular/fire/compat/auth';
 })
 export class RegisterComponent {
 
-	constructor(private auth: AngularFireAuth) { }
+	constructor(private auth: AngularFireAuth, private db: AngularFirestore) { }
 
 	inSubmission = false;
 
@@ -66,7 +67,14 @@ export class RegisterComponent {
 				email as string, 
 				password as string
 			);
-			console.log(userCred);
+			
+			this.db.collection('users').add({
+				uid: userCred.user?.uid,
+				name: this.name.value,
+				email: this.email.value,
+				age: this.age.value,
+				phoneNumber: this.phoneNumber.value
+			});
 		}
 		catch(err) {
 			console.log(err);
