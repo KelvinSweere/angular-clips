@@ -20,7 +20,7 @@ import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
     BrowserModule,
     AppRoutingModule,
     UserModule,
-		AngularFireModule.initializeApp(environment.firebae),
+		AngularFireModule.initializeApp(environment.firebase),
 		AngularFireAuthModule,
 		AngularFirestoreModule,
   ],
