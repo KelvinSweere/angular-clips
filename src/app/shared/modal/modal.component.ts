@@ -19,7 +19,7 @@ constructor(
 	ngOnInit(): void {
 		document.body.appendChild(this.el.nativeElement);
 	}
-
+f
 	onToggleModal($event: Event) {
 		$event.preventDefault();
 		this.modal.toggleModal(this.modalId);
