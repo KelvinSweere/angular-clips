@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavComponent } from './nav/nav.component';
+import { AuthService } from './services/auth.service';
 
 @Component({
   selector: 'app-root',
@@ -9,4 +9,7 @@ import { NavComponent } from './nav/nav.component';
 	]
 })
 export class AppComponent {
+	constructor(public auth: AuthService) {
+
+	}
 }

@@ -31,6 +31,12 @@ placeholder={{placeholder}}>
 		<p *ngIf="control.hasError('')">
 			Value to high.
 		</p>
+		<p *ngIf="control.hasError('noMatch')">
+			Passwords do not match.
+		</p>
+		<p *ngIf="control.hasError('emailTaken')">
+			Email taken already. Please try another email.
+		</p>
 	</div>
 
 	
