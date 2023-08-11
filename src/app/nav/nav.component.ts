@@ -11,9 +11,12 @@ import { AngularFireAuth } from '@angular/fire/compat/auth';
 export class NavComponent {
 	isAuthenticated: boolean = false;
 
-	constructor(public modal: ModalService, public auth: AuthService, private afAuth: AngularFireAuth) {
+	constructor(
+			public modal: ModalService, 
+			public auth: AuthService, 
+		) {
 		this.auth.isAuthenticated$.subscribe(status => {
-			this .isAuthenticated = status;
+			this.isAuthenticated = status;
 		})
 	}
 
@@ -22,8 +25,4 @@ export class NavComponent {
 		this.modal.toggleModal('auth');
 	}
 
-	async logout($event: Event) {
-		$event.preventDefault();
-		await this.afAuth.signOut();
-	}
 }
