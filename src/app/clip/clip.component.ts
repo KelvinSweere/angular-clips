@@ -14,9 +14,9 @@ export class ClipComponent {
 	}
 
 	ngOnInit(): void {
-		this.id = this.route.snapshot.paramMap.get('id') ?? '';
-
-		console.log("clip id: " + this.id);
+		this.route.params.subscribe((params) => {
+			this.id = params['id'];
+		});
 	}
 
 }
