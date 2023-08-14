@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { ModalService } from '../services/modal.service';
 import { AuthService } from '../services/auth.service';
-import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-nav',
@@ -13,7 +12,7 @@ export class NavComponent {
 
 	constructor(
 			public modal: ModalService, 
-			public auth: AuthService, 
+			public auth: AuthService,
 		) {
 		this.auth.isAuthenticated$.subscribe(status => {
 			this.isAuthenticated = status;

@@ -5,7 +5,6 @@ import { ActivatedRoute, NavigationEnd } from '@angular/router';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/compat/firestore';
 import { Observable, of } from 'rxjs';
-
 import { delay, map, filter, switchMap } from 'rxjs/operators';
 
 import IUser from '../models/user.model';
@@ -30,10 +29,18 @@ export class AuthService {
       map(user => !!user)
     );
 
-    // delay observeable to 1s to handle modal close
     this.isAuthenticatedWithDelay$ = this.isAuthenticated$.pipe(
       delay(1000)
-    );
+     );
+
+		 this.router.events.pipe(
+			filter(event => event instanceof NavigationEnd),
+			map(event => this.route.firstChild),
+			switchMap(route => route ? route.data : of({authOnly: false})),
+		).subscribe((data) => {
+			this.redirect = data['authOnly'] ?? false;
+		});
+		
   }
 
   public async createUser(userData: IUser) {
@@ -76,6 +83,9 @@ export class AuthService {
     }
 
     await this.auth.signOut();
-		await this.router.navigate(['/']);
+
+		if(this.redirect) {
+			await this.router.navigate(['/']);
+		}
   }
 }
