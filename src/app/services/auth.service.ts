@@ -40,7 +40,6 @@ export class AuthService {
 		).subscribe((data) => {
 			this.redirect = data['authOnly'] ?? false;
 		});
-		
   }
 
   public async createUser(userData: IUser) {
