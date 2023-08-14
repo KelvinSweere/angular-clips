@@ -13,6 +13,7 @@ import { HomeComponent } from './home/home.component';
 import { AboutComponent } from './about/about.component';
 import { VideoModule } from './video/video.module';
 import { UploadComponent } from './upload/upload.component';
+import { ClipComponent } from './clip/clip.component';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import { UploadComponent } from './upload/upload.component';
     NavComponent,
     HomeComponent,
     AboutComponent,
-    UploadComponent
+    UploadComponent,
+    ClipComponent
   ],
   imports: [
     BrowserModule,
