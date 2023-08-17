@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 
 import { VideoRoutingModule } from './video-routing.module';
 import { ManageComponent } from './manage/manage.component';
-
+import { SharedModule } from '../shared/shared.module';
 
 @NgModule({
   declarations: [
@@ -11,7 +11,8 @@ import { ManageComponent } from './manage/manage.component';
   ],
   imports: [
     CommonModule,
-    VideoRoutingModule
+    VideoRoutingModule,
+		SharedModule
   ]
 })
 export class VideoModule { }
