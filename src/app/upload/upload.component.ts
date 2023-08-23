@@ -55,11 +55,13 @@ export class UploadComponent {
 		this.isDragOver = true;
 }
 
-	storeFile($event: DragEvent) {
+	storeFile($event: Event) {
 		$event.preventDefault();
 		this.isDragOver = false;
 
-		this.file = $event.dataTransfer?.files[0] || null;
+		this.file = (($event as DragEvent).dataTransfer) 
+			? ($event as DragEvent).dataTransfer?.files[0] ?? null
+			: ($event.target as HTMLInputElement).files?.item(0) ?? null;
 
 		if(!this.file || this.file.type !== 'video/mp4') {
 			this.file = null;
