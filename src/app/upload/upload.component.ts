@@ -2,7 +2,7 @@ import { Component, OnDestroy } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { AngularFireStorage, AngularFireUploadTask } from '@angular/fire/compat/storage';
 import {  v4 as uuid } from 'uuid';
-import { async, last, switchMap } from 'rxjs';
+import { last, switchMap } from 'rxjs';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import firebase from 'firebase/compat/app';
 import { ClipService } from '../services/clip.service';
@@ -105,19 +105,20 @@ export class UploadComponent implements OnDestroy {
 					title: this.title.value,
 					fileName: `${clipFileName}.mp4`,
 					path: clipPath,
-					url
+					url,
+					timeStamp: firebase.firestore.FieldValue.serverTimestamp()
 				};
 
 				const clipDocRef = await this.clipService.createClip(clip);
-
-				setTimeout(() => {
-					this.router.navigate(['/clip', clipDocRef.id]);
-				}, 1000);
 				
 				this.alertColor = 'green';
 				this.alertMessage = 'Success! Your clip is nowready to be shared with the world';
 				this.showPercentage = false;
 				this.inSubmission = false;
+
+				setTimeout(() => {
+					this.router.navigate(['/clip', clipDocRef.id]);
+				}, 1000);
 			},
 			error: (error) => {
 				this.alertColor = 'red';

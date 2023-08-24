@@ -1,3 +1,5 @@
+import { FieldValue } from '@firebase/firestore-types';
+
 export default interface IClip {
 	uid: string;
 	displayName: string;
@@ -5,4 +7,5 @@ export default interface IClip {
 	fileName: string;
 	path: string;
 	url: string;
+	timeStamp: FieldValue;
 }
