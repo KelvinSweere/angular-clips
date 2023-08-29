@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy, Input, OnChanges } from '@angular/core';
 import { ModalService } from 'src/app/services/modal.service';
 import IClip from 'src/app/models/clip.model';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { ClipService } from 'src/app/services/clip.service';
 
 @Component({
   selector: 'app-edit',
@@ -10,11 +11,14 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 })
 export class EditComponent implements OnDestroy, OnInit, OnChanges {
 	@Input() clip: IClip | null = null;
+	inSubmission = false;
+	showAlert = false;
+	alertColor = 'blue';
+	alertMsg = 'Please wait! Updating clip.'
 
-	clipID = new FormControl('', {
+	docID = new FormControl('', {
 		nonNullable: true
 	});
-
 
 	title = new FormControl('', {
 		validators: [
@@ -26,11 +30,12 @@ export class EditComponent implements OnDestroy, OnInit, OnChanges {
 	
 	editForm = new FormGroup({
 		title: this.title,
-		clipID: this.clipID
+		docID: this.docID
 	});
 
 	constructor(
-		private modal: ModalService
+		private modal: ModalService,
+		private clipService: ClipService
 	) { }
 
 	ngOnInit(): void {
@@ -41,12 +46,39 @@ export class EditComponent implements OnDestroy, OnInit, OnChanges {
 		this.modal.unregister('editClip');
 	}
 
-	ngOnChanges(): void {
-		if (!this.clip) {
+  ngOnChanges(): void {
+    if(!this.clip) {
+      return
+    }
+
+    this.inSubmission = false;
+    this.showAlert = false;
+    this.docID.setValue(this.clip.docID!);
+    this.title.setValue(this.clip.title);
+  }
+
+	async submit() {
+		this.inSubmission = true;
+		this.showAlert = true;
+		this.alertColor = 'blue';
+		this.alertMsg = 'Please wait! Updating clip.'
+
+		try {
+			await this.clipService.updateClip(
+				this.docID.value, 
+				this.title.value
+			);
+		}
+		catch(e) {
+			console.error(e);
+			this.inSubmission = false;
+			this.alertColor = 'red';
+			this.alertMsg = 'Error! Could not update clip.'
 			return;
 		}
-		this.clipID.setValue(this.clip.docID!);
-		this.title.setValue(this.clip.title);
+		
+		this.inSubmission = false;
+		this.alertColor = 'green';
+		this.alertMsg = 'Success!'
 	}
-
 }

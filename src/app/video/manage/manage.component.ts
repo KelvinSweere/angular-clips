@@ -28,7 +28,10 @@ export class ManageComponent {
 		this.clipService.getUserClips().subscribe(docs => {
 			this.clips = [];
 			docs.forEach(doc => {
-				this.clips.push(doc);
+				this.clips.push({
+					docID: doc.id,
+					...doc.data(),
+				})
 			});
 		});
 	}
@@ -42,6 +45,7 @@ export class ManageComponent {
 	openModal($event: Event, clip: IClip) {
 		$event.preventDefault();
 		this.activeClip = clip;
+
 		this.modal.toggleModal('editClip');
 	}
 }

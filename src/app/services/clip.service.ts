@@ -31,9 +31,19 @@ export class ClipService {
 				if (!user) {
 							return [];
 					}
-					const uid = user.uid;
-					return this.db.collection<IClip>('clips', ref => ref.where('uid', '==', uid)).valueChanges();
+					
+					const query = this.clipsCollection.ref.where(
+						'uid', '==', user.uid
+					);        
+					
+					return query.get();
 				})
 		);
+	}
+
+	updateClip(id: string, title: string): Promise<void> {
+		return this.clipsCollection.doc(id).update({
+			title
+		});
 	}
 }
