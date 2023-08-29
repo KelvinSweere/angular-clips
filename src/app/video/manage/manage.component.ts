@@ -55,6 +55,14 @@ export class ManageComponent {
 				this.clips[index].title = $event.title;
 			}
 		});
+	}
 
+	deleteClip = async ($event: Event, clip: IClip) => {
+		$event.preventDefault();
+		
+		await this.clipService.deleteClip(clip);
+		
+		this.clips = this.clips.filter((c) => c.docID !== clip.docID);
+		
 	}
 }
