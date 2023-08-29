@@ -15,6 +15,9 @@ import { VideoModule } from './video/video.module';
 import { UploadComponent } from './upload/upload.component';
 import { ClipComponent } from './clip/clip.component';
 import { NotFoundComponent } from './not-found/not-found.component';
+import { ReactiveFormsModule } from '@angular/forms';
+import { AngularFireStorageModule } from '@angular/fire/compat/storage';
+import { SharedModule } from './shared/shared.module';
 
 @NgModule({
   declarations: [
@@ -24,16 +27,19 @@ import { NotFoundComponent } from './not-found/not-found.component';
     AboutComponent,
     UploadComponent,
     ClipComponent,
-    NotFoundComponent
+    NotFoundComponent,
   ],
   imports: [
+		SharedModule,
     BrowserModule,
     UserModule,
 		AngularFireModule.initializeApp(environment.firebase),
 		AngularFireAuthModule,
 		AngularFirestoreModule,
+		AngularFireStorageModule,
 		VideoModule,
-		AppRoutingModule
+		AppRoutingModule,
+		ReactiveFormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
