@@ -9,6 +9,7 @@ import { ClipService } from '../services/clip.service';
 import IClip from '../models/clip.model';
 import { Router } from '@angular/router';
 import { FfmpegService } from '../services/ffmpeg.service';
+import { combineLatest } from 'rxjs';
 
 @Component({
   selector: 'app-upload',
@@ -29,6 +30,7 @@ export class UploadComponent implements OnDestroy {
 	task?: AngularFireUploadTask;
 	screenshots: string[] = [];
 	selectedScreenshot = '';
+	screenshotTask?: AngularFireUploadTask;
 
 	title = new FormControl('', {
 		validators: [
@@ -89,7 +91,7 @@ export class UploadComponent implements OnDestroy {
 		this.nextStep = true;
 	}
 
-	uploadFile() {
+	async uploadFile() {
 		this.showAlert = true;
 		this.alertColor = 'blue';
 		this.alertMessage = 'Please wait! Your video is being uploaded';
@@ -99,11 +101,31 @@ export class UploadComponent implements OnDestroy {
 		const clipFileName = uuid();
 		const clipPath = `clips/${clipFileName}.mp4`;
 
-		this.task = this.storage.upload(clipPath, this.file);
+		const screenshotBlob = await this.ffmpegService.blobFromURL(
+			this.selectedScreenshot
+		);
+		const screenshotPath = `screenshots/${clipFileName}.png`;
 
-		this.task.percentageChanges().subscribe(progress => {
-			this.percentage = progress as number / 100;
-		});
+		this.screenshotTask = this.storage.upload(screenshotPath, screenshotBlob);
+
+		this.task = this.storage.upload(clipPath, this.file);
+    combineLatest([
+      this.task.percentageChanges(),
+      this.screenshotTask.percentageChanges()
+    ]).subscribe(
+      (progress) => {
+        const [clipProgress, screenshotProgress] = progress;
+
+        if(!clipProgress || !screenshotProgress) {
+          return
+        }
+
+        const total = clipProgress + screenshotProgress;
+
+        this.percentage = total as number / 200;
+      }
+    );
+		
 		const clipRef = this.storage.ref(clipPath);
 
 		this.task.snapshotChanges().pipe(
