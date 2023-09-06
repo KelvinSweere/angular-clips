@@ -5,10 +5,10 @@ import {  v4 as uuid } from 'uuid';
 import { last, switchMap } from 'rxjs';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import firebase from 'firebase/compat/app';
-import { ClipService } from '../services/clip.service';
-import IClip from '../models/clip.model';
+import { ClipService } from '../../services/clip.service';
+import IClip from '../../models/clip.model';
 import { Router } from '@angular/router';
-import { FfmpegService } from '../services/ffmpeg.service';
+import { FfmpegService } from '../../services/ffmpeg.service';
 import { combineLatest } from 'rxjs';
 
 @Component({
