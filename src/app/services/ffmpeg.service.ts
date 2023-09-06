@@ -20,8 +20,8 @@ export class FfmpegService {
 		this.isReady = true;
 	}
 	
-	public async getScreenshots(file: File) {
-		if (!this.isReady) return;
+	public async getScreenshots(file: File): Promise<string[]> {
+		if (!this.isReady) return [];
 		
 		const data = await fetchFile(file);
 		this.ffmpeg.FS('writeFile', file.name, data);
@@ -53,5 +53,7 @@ export class FfmpegService {
 			const screenshotUrl = URL.createObjectURL(screenshotBlob);
 			screenshots.push(screenshotUrl);
 		});
+
+		return screenshots;
 	}
 }

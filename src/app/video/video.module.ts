@@ -10,7 +10,7 @@ import { EditComponent } from './edit/edit.component';
 @NgModule({
   declarations: [
     ManageComponent,
-    EditComponent
+    EditComponent,
   ],
   imports: [
     CommonModule,

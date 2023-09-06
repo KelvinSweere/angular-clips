@@ -18,6 +18,7 @@ import { NotFoundComponent } from './not-found/not-found.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { AngularFireStorageModule } from '@angular/fire/compat/storage';
 import { SharedModule } from './shared/shared.module';
+import { SafeUrlPipe } from './video/pipes/safe-url.pipe';
 
 @NgModule({
   declarations: [
@@ -28,6 +29,7 @@ import { SharedModule } from './shared/shared.module';
     UploadComponent,
     ClipComponent,
     NotFoundComponent,
+		SafeUrlPipe
   ],
   imports: [
 		SharedModule,
