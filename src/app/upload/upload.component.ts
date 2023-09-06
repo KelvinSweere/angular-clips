@@ -8,6 +8,7 @@ import firebase from 'firebase/compat/app';
 import { ClipService } from '../services/clip.service';
 import IClip from '../models/clip.model';
 import { Router } from '@angular/router';
+import { FfmpegService } from '../services/ffmpeg.service';
 
 @Component({
   selector: 'app-upload',
@@ -43,11 +44,13 @@ export class UploadComponent implements OnDestroy {
 		private storage: AngularFireStorage,
 		private auth: AngularFireAuth,
 		private clipService: ClipService,
-		private router: Router
+		private router: Router,
+		public ffmpegService: FfmpegService
 	) {
 		this.auth.user.subscribe(user => {
 			this.user = user;
 		});
+		ffmpegService.init();
 	 }
 
 	ngOnDestroy(): void {
@@ -59,7 +62,7 @@ export class UploadComponent implements OnDestroy {
 		this.isDragOver = true;
 }
 
-	storeFile($event: Event) {
+	async storeFile($event: Event) {
 		$event.preventDefault();
 		this.isDragOver = false;
 
@@ -72,6 +75,8 @@ export class UploadComponent implements OnDestroy {
 			alert('Only video files are allowed');
 			return;
 		}
+
+		await this.ffmpegService.getScreenshots(this.file);
 
 		this.title.setValue(this.file.name.replace('/\.[^/.]+$/', ''));
 		this.nextStep = true;
