@@ -2,14 +2,14 @@ import { Component, OnDestroy } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { AngularFireStorage, AngularFireUploadTask } from '@angular/fire/compat/storage';
 import {  v4 as uuid } from 'uuid';
-import { last, switchMap } from 'rxjs';
+import { switchMap } from 'rxjs';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import firebase from 'firebase/compat/app';
 import { ClipService } from '../../services/clip.service';
 import IClip from '../../models/clip.model';
 import { Router } from '@angular/router';
 import { FfmpegService } from '../../services/ffmpeg.service';
-import { combineLatest } from 'rxjs';
+import { combineLatest, forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-upload',
@@ -107,6 +107,7 @@ export class UploadComponent implements OnDestroy {
 		const screenshotPath = `screenshots/${clipFileName}.png`;
 
 		this.screenshotTask = this.storage.upload(screenshotPath, screenshotBlob);
+		const screenshotRef = this.storage.ref(screenshotPath);
 
 		this.task = this.storage.upload(clipPath, this.file);
     combineLatest([
@@ -128,18 +129,27 @@ export class UploadComponent implements OnDestroy {
 		
 		const clipRef = this.storage.ref(clipPath);
 
-		this.task.snapshotChanges().pipe(
-			last(),
-			switchMap(() => clipRef.getDownloadURL())
+		forkJoin([
+			this.task.snapshotChanges(),
+			this.screenshotTask.snapshotChanges()
+		])
+		.pipe(
+			switchMap(() => forkJoin([
+				clipRef.getDownloadURL(),
+				screenshotRef.getDownloadURL()
+			]))
 		).subscribe({
-			next: async (url) => {
+			next: async (urls) => {
+				const [clipUrl, screenshotUrl] = urls;
+
 				const clip: IClip = {
 					uid: this.user?.uid as string,
 					displayName: this.user?.displayName as string,
 					title: this.title.value,
 					fileName: `${clipFileName}.mp4`,
 					path: clipPath,
-					url,
+					url: clipUrl,
+					screenshotUrl: screenshotUrl,
 					timeStamp: firebase.firestore.FieldValue.serverTimestamp()
 				};
 
