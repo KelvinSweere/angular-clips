@@ -9,19 +9,39 @@ import { AngularFireModule } from '@angular/fire/compat';
 import { environment } from 'src/environments/environment';
 import { AngularFireAuthModule } from '@angular/fire/compat/auth';
 import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
+import { HomeComponent } from './home/home.component';
+import { AboutComponent } from './about/about.component';
+import { VideoModule } from './video/video.module';
+import { UploadComponent } from './video/upload/upload.component';
+import { ClipComponent } from './clip/clip.component';
+import { NotFoundComponent } from './not-found/not-found.component';
+import { ReactiveFormsModule } from '@angular/forms';
+import { AngularFireStorageModule } from '@angular/fire/compat/storage';
+import { SharedModule } from './shared/shared.module';
+import { SafeUrlPipe } from './video/pipes/safe-url.pipe';
 
 @NgModule({
   declarations: [
     AppComponent,
-    NavComponent
+    NavComponent,
+    HomeComponent,
+    AboutComponent,
+    UploadComponent,
+    ClipComponent,
+    NotFoundComponent,
+		SafeUrlPipe
   ],
   imports: [
+		SharedModule,
     BrowserModule,
-    AppRoutingModule,
     UserModule,
 		AngularFireModule.initializeApp(environment.firebase),
 		AngularFireAuthModule,
 		AngularFirestoreModule,
+		AngularFireStorageModule,
+		VideoModule,
+		AppRoutingModule,
+		ReactiveFormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

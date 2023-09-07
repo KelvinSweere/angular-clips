@@ -1,35 +1,62 @@
-<app-alert *ngIf="showAlert" [color]="alertColor">
-	{{ alertMsg }}
+<app-alert 
+  *ngIf="showAlert"
+  [color]="alertColor">
+  {{ alertMsg }}
 </app-alert>
-
-<!-- Login Form -->
-<form #logingForm="ngForm" (ngSubmit)="login()">
-	<!-- Email -->
-	<div class="mb-3">
-		<label class="inline-block mb-2">Email</label>
-		<input #email="ngModel"
-			type="email" name="email" [(ngModel)]="credentials.email"
-			class="block w-full py-1.5 px-3 text-gray-200 border border-gray-400 transition
-				duration-500 focus:outline-none rounded bg-transparent
-				focus:border-indigo-400"
-			placeholder="Enter Email" 
-			pattern="^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$"/>
-			<p *ngIf="email.errors && email.touched && email.dirty " class="text-red-400">
+ 
+ <!-- Login Form -->
+ <form 
+  #loginForm="ngForm"
+  (ngSubmit)="login()"
+  >
+    <!-- Email -->
+		<div class="mb-3">
+			<input 
+				#email="ngModel"
+				type="email"
+				name="email"
+				[(ngModel)]="credentials.email"
+				required
+				class="block w-full py-1.5 px-3 text-gray-200 border border-gray-400 transition
+					duration-500 focus:outline-none rounded bg-transparent
+					focus:border-indigo-400"
+				placeholder="Enter Email" />
+			<p 
+				*ngIf="email.errors && email.touched && email.dirty" 
+				class="text-red-400">
 				Email is invalid
 			</p>
 		</div>
-	<!-- Password -->
-	<div class="mb-3">
-		<label class="inline-block mb-2">Password</label>
-		<input type="password" name="password" ngModel=required #password="ngModel"
-			[(ngModel)]="credentials.password"
-			class="block w-full py-1.5 px-3 text-gray-200 border border-gray-400 transition
-			duration-500 focus:outline-none rounded bg-transparent focus:border-indigo-400"
-			placeholder="Password" />
-	</div>
-	<button type="submit" [disabled]="logingForm.invalid || inSubmission"
-		class="block w-full bg-indigo-400 text-white py-1.5 px-3 rounded transition
-			hover:bg-indigo-500 disabled:opacity-50 disabled:bg-indigo-400">
-		Submit
-	</button>
-</form>
+
+    <!-- Password -->
+    <div class="mb-3">
+      <label class="inline-block mb-2">Password</label>
+      <input
+        #password="ngModel"
+        type="password"
+        name="password"
+        [(ngModel)]="credentials.password"
+        required
+        pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$"
+        class="block w-full py-1.5 px-3 text-gray-200 border border-gray-400 transition
+        duration-500 focus:outline-none rounded bg-transparent focus:border-indigo-400"
+        placeholder="Password" />
+    </div>
+    <p
+      *ngIf="password.errors
+        && password.touched
+        && password.dirty
+      " 
+      class="text-red-400"
+    >
+      Invalid Password
+    </p>
+    <button 
+        type="submit"
+        [disabled]="loginForm.invalid || inSubmission"
+        class="block w-full bg-indigo-400 text-white py-1.5 px-3 rounded transition
+        hover:bg-indigo-500 disabled:opacity-50 disabled:bg-indigo-400"
+      >
+      Submit
+    </button>
+  </form>
