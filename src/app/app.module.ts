@@ -12,12 +12,13 @@ import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
 import { HomeComponent } from './home/home.component';
 import { AboutComponent } from './about/about.component';
 import { VideoModule } from './video/video.module';
-import { UploadComponent } from './upload/upload.component';
+import { UploadComponent } from './video/upload/upload.component';
 import { ClipComponent } from './clip/clip.component';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { AngularFireStorageModule } from '@angular/fire/compat/storage';
 import { SharedModule } from './shared/shared.module';
+import { SafeUrlPipe } from './video/pipes/safe-url.pipe';
 
 @NgModule({
   declarations: [
@@ -28,6 +29,7 @@ import { SharedModule } from './shared/shared.module';
     UploadComponent,
     ClipComponent,
     NotFoundComponent,
+		SafeUrlPipe
   ],
   imports: [
 		SharedModule,
