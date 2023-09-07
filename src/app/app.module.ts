@@ -19,6 +19,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { AngularFireStorageModule } from '@angular/fire/compat/storage';
 import { SharedModule } from './shared/shared.module';
 import { SafeUrlPipe } from './video/pipes/safe-url.pipe';
+import { ClipsListComponent } from './clips-list/clips-list.component';
 
 @NgModule({
   declarations: [
@@ -29,7 +30,8 @@ import { SafeUrlPipe } from './video/pipes/safe-url.pipe';
     UploadComponent,
     ClipComponent,
     NotFoundComponent,
-		SafeUrlPipe
+		SafeUrlPipe,
+  ClipsListComponent
   ],
   imports: [
 		SharedModule,
