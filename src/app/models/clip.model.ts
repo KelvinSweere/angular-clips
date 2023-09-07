@@ -10,4 +10,5 @@ export default interface IClip {
 	url: string;
 	screenshotUrl: string;
 	timeStamp: FieldValue;
+	screenshotFileName: string;
 }
