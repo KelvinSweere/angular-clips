@@ -141,7 +141,7 @@ export class UploadComponent implements OnDestroy {
 		).subscribe({
 			next: async (urls) => {
 				const [clipUrl, screenshotUrl] = urls;
-
+				
 				const clip: IClip = {
 					uid: this.user?.uid as string,
 					displayName: this.user?.displayName as string,

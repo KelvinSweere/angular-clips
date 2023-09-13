@@ -4,6 +4,7 @@ import IClip from 'src/app/models/clip.model';
 import { ClipService } from 'src/app/services/clip.service';
 import { ModalService } from 'src/app/services/modal.service';
 import { BehaviorSubject } from 'rxjs';
+import { Console } from 'console';
 
 @Component({
   selector: 'app-manage',
@@ -38,6 +39,7 @@ export class ManageComponent {
 					...doc.data(),
 				})
 			});
+			console.log("this.clips", this.clips);
 		});
 	}
 
@@ -68,5 +70,17 @@ export class ManageComponent {
 		await this.clipService.deleteClip(clip);
 
 		this.clips = this.clips.filter((c) => c.docID !== clip.docID);
+	}
+
+	copyToClipboard = async ($event: MouseEvent, docID: string | undefined) => {
+		$event.preventDefault();
+		
+		if(!docID) 
+			return console.error('No docID');
+
+		const url = `${location.origin}/clip/${docID}`;
+		await navigator.clipboard.writeText(url);
+
+		alert('Copied to clipboard');
 	}
 }
