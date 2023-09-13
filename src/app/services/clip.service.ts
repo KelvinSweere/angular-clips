@@ -41,7 +41,7 @@ export class ClipService implements Resolve<IClip | null> {
           return data;
         })
       );
-  }
+  } 
 
   async createClip(data: IClip): Promise<DocumentReference<IClip>> {
     return await this.clipsCollection.add(data);
@@ -95,7 +95,7 @@ export class ClipService implements Resolve<IClip | null> {
         const query = this.clipsCollection.ref.where(
           'uid', '==', user.uid
         ).orderBy(
-          'timestamp',
+          'timeStamp',
           sort === '1' ? 'desc' : 'asc'
         );
 
