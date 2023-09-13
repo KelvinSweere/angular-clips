@@ -10,7 +10,10 @@ export class FbTimestampPipe implements PipeTransform {
 	constructor(private datePipe: DatePipe) {
 	}
 
-  transform(value: FieldValue): unknown {
+  transform(value: FieldValue | undefined): unknown {
+		if(!value) {
+			return '';
+		}
 		const date = (value as Timestamp).toDate();
     return this.datePipe.transform(date, 'dd/MM/yyyy');
   }
