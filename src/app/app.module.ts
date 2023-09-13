@@ -20,6 +20,7 @@ import { AngularFireStorageModule } from '@angular/fire/compat/storage';
 import { SharedModule } from './shared/shared.module';
 import { SafeUrlPipe } from './video/pipes/safe-url.pipe';
 import { ClipsListComponent } from './clips-list/clips-list.component';
+import { FbTimestampPipe } from './pipes/fb-timestamp.pipe';
 
 @NgModule({
   declarations: [
@@ -31,7 +32,8 @@ import { ClipsListComponent } from './clips-list/clips-list.component';
     ClipComponent,
     NotFoundComponent,
 		SafeUrlPipe,
-  ClipsListComponent
+  ClipsListComponent,
+  FbTimestampPipe
   ],
   imports: [
 		SharedModule,
