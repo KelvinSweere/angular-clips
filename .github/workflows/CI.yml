@@ -28,11 +28,12 @@ jobs:
       - name: Install Dependencies
         run: npm install
 
-      - name: Run Tests with Code Coverage
-        run: ng test --watch=false --browsers=ChromeHeadless --code-coverage
+      - name: Run Jasmine tests
+        run: npm run test -- --no-watch --no-progress --browsers=ChromeHeadlessCI
 
-      - name: Archive Code Coverage
-        uses: actions/upload-artifact@v2
+      - name: Comment Test Coverage
+        uses: AthleticNet/comment-test-coverage@1.1
         with:
-          name: code-coverage
-          path: coverage
+          token: ${{ secrets.GITHUB_TOKEN }}
+          path: coverage/coverage-summary.json
+          title: Karma Test Coverage
