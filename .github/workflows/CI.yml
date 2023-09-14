@@ -15,7 +15,7 @@ jobs:
 
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Set up Node.js
         uses: actions/setup-node@v3
@@ -32,7 +32,7 @@ jobs:
         run: ng test --watch=false --browsers=ChromeHeadless --code-coverage
 
       - name: Archive Code Coverage
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: code-coverage
           path: coverage
@@ -44,7 +44,7 @@ jobs:
 
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Set up Node.js
         uses: actions/setup-node@v3
@@ -58,7 +58,7 @@ jobs:
         run: npm install -g @angular/cli
 
       - name: Run Cypress
-        uses: cypress-io/github-action@v3
+        uses: cypress-io/github-action@v6
         with:
           browser: chrome
           start: ng serve --host 0.0.0.0 --port 4200
