@@ -36,3 +36,34 @@ jobs:
         with:
           name: code-coverage
           path: coverage
+  
+  e2e-tests:
+    name: End-to-End Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '18'
+
+      - name: Install Cypress
+        run: npm install cypress --save-dev
+
+      - name: Start Angular Development Server
+        run: ng serve &
+
+      - name: Wait for Server to Start
+        run: sleep 10
+
+      - name: Run Cypress Tests
+        run: npx cypress run
+
+      - name: Archive Test Results
+        uses: actions/upload-artifact@v2
+        with:
+          name: test-results
+          path: cypress/videos
