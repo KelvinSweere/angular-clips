@@ -7,7 +7,6 @@ import { AsyncValidator, AbstractControl, ValidationErrors} from "@angular/forms
 })
 export class EmailTaken implements AsyncValidator {
 	constructor(private auth: AngularFireAuth) { 
-		
 	}
 
 	validate = (control: AbstractControl) : Promise<ValidationErrors | null> => {
