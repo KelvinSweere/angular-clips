@@ -62,6 +62,6 @@ jobs:
         with:
           project: ./site
           browser: chrome
-          build: ng build
-          start: ng run
+          # build: ng build
+          start: ng serve --port 4200
           wait-on: "http://localhost:4200"
