@@ -51,8 +51,17 @@ jobs:
         with:
           node-version: '18'
 
-      - name: Cypress run
-        uses: cypress-io/github-action@v6
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Install Angular CLI
+        run: npm install -g @angular/cli
+
+      - name: Run Cypress
+        uses: cypress-io/github-action@v3
         with:
-          build: npm run cy:run
-          wait-on: http://localhost:4200
+          project: ./site
+          browser: chrome
+          build: ng build
+          start: ng run
+          wait-on: "http://localhost:4200"
