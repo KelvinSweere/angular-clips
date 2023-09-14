@@ -3,14 +3,19 @@
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "outDir": "./out-tsc/app",
-    "types": ["node", "jasmine"]
+    "types": [
+			"node", 
+			"jasmine"
+		]
   },
   "files": [
     "src/main.ts",
   ],
   "include": [
-    "**/*.spec.ts",
-		"jasmine"
-	],
-	
+    "src/**/*.ts",
+    "src/**/*.spec.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]	
 }
