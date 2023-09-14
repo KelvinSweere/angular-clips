@@ -9,8 +9,8 @@ on:
       - main
 
 jobs:
-  test:
-    name: Unit Test
+  setup:
+    name: setup
     runs-on: ubuntu-latest
 
     steps:
@@ -24,6 +24,27 @@ jobs:
 
       - name: Install Angular CLI
         run: npm install -g @angular/cli
+
+      - name: Archive Angular CLI
+        uses: actions/upload-artifact@v2
+        with:
+          name: angular-cli
+          path: /usr/local/bin/ng
+
+  test:
+    name: Unit Test
+    runs-on: ubuntu-latest
+    needs: setup
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Restore Angular CLI
+        uses: actions/download-artifact@v2
+        with:
+          name: angular-cli
+          path: /usr/local/bin/ng
 
       - name: Install Dependencies
         run: npm install
@@ -36,7 +57,7 @@ jobs:
         with:
           name: code-coverage
           path: coverage
-  
+
   e2e-tests:
     name: End-to-End Tests
     runs-on: ubuntu-latest
@@ -46,16 +67,14 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v2
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v2
+      - name: Restore Angular CLI
+        uses: actions/download-artifact@v2
         with:
-          node-version: '18'
+          name: angular-cli
+          path: /usr/local/bin/ng
 
       - name: Install Dependencies
         run: npm install
-
-      - name: Install Angular CLI
-        run: npm install -g @angular/cli
 
       - name: Run Cypress
         uses: cypress-io/github-action@v3
