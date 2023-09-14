@@ -1,86 +1,92 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { EditComponent } from './edit.component';
+import { Component, OnInit, OnDestroy, Input, OnChanges, Output, EventEmitter } from '@angular/core';
 import { ModalService } from 'src/app/services/modal.service';
-import { ClipService } from 'src/app/services/clip.service';
-import { ReactiveFormsModule, FormsModule } from '@angular/forms';
-import { of } from 'rxjs';
 import IClip from 'src/app/models/clip.model';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { ClipService } from 'src/app/services/clip.service';
 
-describe('EditComponent', () => {
-  let component: EditComponent;
-  let fixture: ComponentFixture<EditComponent>;
+@Component({
+  selector: 'app-edit',
+  templateUrl: './edit.component.html',
+  styleUrls: ['./edit.component.scss']
+})
+export class EditComponent implements OnDestroy, OnInit, OnChanges {
+	@Input() clip: IClip | null = null;
+	inSubmission = false;
+	showAlert = false;
+	alertColor = 'blue';
+	alertMsg = 'Please wait! Updating clip.'
+	@Output() update = new EventEmitter<IClip>();
 
-  // Mock services
-  const modalServiceMock = {
-    register: jasmine.createSpy(),
-    unregister: jasmine.createSpy()
-  };
+	docID = new FormControl('', {
+		nonNullable: true
+	});
 
-  const clipServiceMock = {
-    updateClip: jasmine.createSpy().and.returnValue(of(true))
-  };
+	title = new FormControl('', {
+		validators: [
+			Validators.required,
+			Validators.minLength(3),
+		],
+		nonNullable: true
+	});
+	
+	editForm = new FormGroup({
+		title: this.title,
+		docID: this.docID
+	});
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      declarations: [ EditComponent ],
-      imports: [ ReactiveFormsModule, FormsModule ],
-      providers: [
-        { provide: ModalService, useValue: modalServiceMock },
-        { provide: ClipService, useValue: clipServiceMock }
-      ]
-    })
-    .compileComponents();
+	constructor(
+		private modal: ModalService,
+		private clipService: ClipService
+	) { }
 
-    fixture = TestBed.createComponent(EditComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+	ngOnInit(): void {
+		this.modal.register('editClip');
+	}
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
+	ngOnDestroy(): void {
+		this.modal.unregister('editClip');
+	}
 
-  it('should register and unregister modal', () => {
-    expect(modalServiceMock.register).toHaveBeenCalledWith('editClip');
-    component.ngOnDestroy();
-    expect(modalServiceMock.unregister).toHaveBeenCalledWith('editClip');
-  });
+  ngOnChanges(): void {
+    if(!this.clip) {
+      return
+    }
 
-  it('should set values on ngOnChanges', () => {
-    const clip: IClip = {
-      docID: '1',
-      title: 'Test Clip'
-    };
-    component.clip = clip;
-    component.ngOnChanges();
-    expect(component.docID.value).toBe(clip.docID);
-    expect(component.title.value).toBe(clip.title);
-  });
+    this.inSubmission = false;
+    this.showAlert = false;
+    this.docID.setValue(this.clip.docID!);
+    this.title.setValue(this.clip.title);
+  }
 
-  it('should submit and update clip', async () => {
-    const clip: IClip = {
-      docID: '1',
-      title: 'Test Clip'
-    };
-    component.clip = clip;
+	async submit() {
+		if(!this.clip) {
+			return;
+		}
 
-    await component.submit();
-    expect(clipServiceMock.updateClip).toHaveBeenCalledWith(clip.docID, clip.title);
-    expect(component.clip.title).toBe(clip.title);
-  });
+		this.inSubmission = true;
+		this.showAlert = true;
+		this.alertColor = 'blue';
+		this.alertMsg = 'Please wait! Updating clip.'
 
-  it('should handle submit error', async () => {
-    const clip: IClip = {
-      docID: '1',
-      title: 'Test Clip'
-    };
-    component.clip = clip;
-    clipServiceMock.updateClip.and.returnValue(Promise.reject('Error'));
+		try {
+			await this.clipService.updateClip(
+				this.docID.value, 
+				this.title.value
+			);
+		}
+		catch(e) {
+			console.error(e);
+			this.inSubmission = false;
+			this.alertColor = 'red';
+			this.alertMsg = 'Error! Could not update clip.'
+			return;
+		}
+		
+		this.clip.title = this.title.value;
+		this.update.emit(this.clip);
 
-    await component.submit();
-    expect(clipServiceMock.updateClip).toHaveBeenCalledWith(clip.docID, clip.title);
-    expect(component.inSubmission).toBe(false);
-    expect(component.alertColor).toBe('red');
-    expect(component.alertMsg).toBe('Error! Could not update clip.');
-  });
-});
+		this.inSubmission = false;
+		this.alertColor = 'green';
+		this.alertMsg = 'Success!'
+	}
+}
